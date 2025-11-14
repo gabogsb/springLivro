@@ -1,4 +1,8 @@
 package br.com.gbdev.springLivro.enums
 
-class bookStatus {
+enum class bookStatus {
+  ATIVO,
+  VENDIDO,
+  CANCELADO,
+  DELETADO
 }

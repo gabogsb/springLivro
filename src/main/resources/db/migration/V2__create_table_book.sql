@@ -1,0 +1,9 @@
+CREATE TABLE books (
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    title VARCHAR(200) NOT NULL,
+    author VARCHAR(100) NOT NULL,
+    price DECIMAL(10, 2) NOT NULL,
+    status VARCHAR(20) NOT NULL,
+    customer_id BIGINT NOT NULL,
+    FOREIGN KEY (customer_id) REFERENCES customers(id)
+);
