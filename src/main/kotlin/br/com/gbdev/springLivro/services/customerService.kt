@@ -1,19 +1,13 @@
 package br.com.gbdev.springLivro.services
 
-import br.com.gbdev.springLivro.controllers.request.postCustomerRequest
-import br.com.gbdev.springLivro.controllers.request.putCustomerRequest
 import br.com.gbdev.springLivro.models.customerModel
-import org.springframework.http.HttpStatus
+import br.com.gbdev.springLivro.repositories.customerRepository
 import org.springframework.stereotype.Service
-import org.springframework.web.bind.annotation.DeleteMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PutMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.ResponseStatus
 
 @Service
-class customerService {
+class customerService(
+  val customerRepository: customerRepository
+) {
 
   val customers = mutableListOf<customerModel>()
 
@@ -26,43 +20,26 @@ class customerService {
     return customers
   }
 
-  fun getCustomer(id: String): customerModel? {
-
-    return customers.firstOrNull { it.id == id }
-
-//    val customer = customers.firstOrNull { it.id == id }
-//    if (customer != null) {
-//      return customer
-//    } else {
-//      return null
-//    }
+  fun getCustomer(id: Int): customerModel {
+    return customerRepository.findById(id).orElseThrow()
   }
 
   fun createCustomer(
     customerModel: customerModel
   ) {
-
-    val id = if (customers.isEmpty()) {
-      "1"
-    } else {
-      customers.last().id.toInt() + 1
-    }.toString()
-
-    customers.add(customerModel)
-    println(customerModel)
+    customerRepository.save(customerModel)
   }
 
   fun putCustomer(
-    id: String,
-    customerModel: putCustomerRequest
+    customerModel: customerModel
   ) {
-    return customers.firstOrNull { it.id == id }.let {
-      it?.name = customerModel.name
-      it?.email = customerModel.email
+    if (!customerRepository.existsById(customerModel.id!!)) {
+      throw Exception()
     }
+    customerRepository.save(customerModel)
   }
 
-  fun deleteCustomer(id: String) {
+  fun deleteCustomer(id: Int) {
     customers.removeIf { it.id == id }
   }
 

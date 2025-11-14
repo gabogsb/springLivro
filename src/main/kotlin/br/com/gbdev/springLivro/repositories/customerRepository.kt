@@ -1,4 +1,7 @@
 package br.com.gbdev.springLivro.repositories
 
-class customerRepository {
+import br.com.gbdev.springLivro.models.customerModel
+import org.springframework.data.repository.CrudRepository
+
+interface customerRepository: CrudRepository<customerModel, Int> {
 }
